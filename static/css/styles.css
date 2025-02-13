@@ -1,0 +1,134 @@
+/* Add these styles to your CSS file */
+.data-analysis-section button {
+    transition: background-color 0.3s ease;
+}
+
+.data-analysis-section button.active {
+    background-color: var(--green-color);
+    color: white;
+}
+
+/* For the sorting headers */
+th[data-column] {
+    cursor: pointer;
+    user-select: none;
+}
+
+th[data-column].active-sort {
+    background-color: #f0f0f0;
+}
+
+.sort-indicator {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+/* News Feed Styles */
+#news-feed {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.news-header h3 {
+    color: #00ff00;
+    margin: 0 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333;
+}
+
+.news-item {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-bottom: 1px solid #2a2a2a;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.news-item:hover {
+    background-color: #2a2a2a;
+}
+
+.news-title {
+    color: #cecece;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+}
+
+.news-item:hover .news-title {
+    color: #00ff00;
+}
+
+.news-content {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.external-link {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.news-meta {
+    display: flex;
+    gap: 15px;
+    font-size: 12px;
+    color: #666;
+}
+
+.news-source {
+    color: #888;
+}
+
+.news-time {
+    color: #666;
+}
+
+.loading, .no-news, .error {
+    padding: 8px 12px;
+    color: #666;
+}
+
+.error {
+    color: #ff0000;
+}
+
+/* Scrollbar styling */
+.news-content {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.news-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.news-content::-webkit-scrollbar-track {
+    background: var(--background-color);
+    border-radius: 4px;
+}
+
+.news-content::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 4px;
+}
+
+.news-content::-webkit-scrollbar-thumb:hover {
+    background-color: var(--green-color);
+}
+
+/* Override any default link styles */
+.news-title:visited {
+    color: #cecece;
+}
+
+.news-title:active {
+    color: #cecece;
+}

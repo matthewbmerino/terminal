@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal | Good Future</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.1.0/chartjs-plugin-annotation.min.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script type="module" src="static/js/portfolio.js"></script>
+    <script type="module" src="/static/js/chat.js"></script>
+    
+</head>
+<body>
+    <!-- <div class="header"> -->
+        <!-- <h2>TERMINAL</h2> -->
+        <!-- <div class="login-container">
+            <button id="login-btn" class="login-btn">Login</button>
+            <div id="login-form" class="login-form" style="display: none;">
+                <input type="text" id="username" placeholder="Username">
+                <input type="password" id="password" placeholder="Password">
+                <button id="submit-login">Submit</button>
+                <button id="cancel-login">Cancel</button>
+            </div>
+        </div> -->
+    <!-- </div> -->
+    <div class="container">
+        <div class="left-panel box">
+            <div class="box-header">
+                <span>PORTFOLIO OVERVIEW</span>
+                <span class="minimize-btn"></span>
+            </div>
+            <div class="box-content">
+                <div class="market-data">
+                    <div class="data-box">
+                        <div class="data-label">PORTFOLIO VALUE</div>
+                        <div class="data-value">$<span id="total-portfolio-value">0.00</span></div>
+                    </div>
+                    <div class="data-box">
+                        <div class="data-label">TOTAL CHANGE</div>
+                        <div class="data-value"><span id="total-change-value">0.00</span></div>
+                    </div>
+                    <div class="data-box">
+                        <div class="data-label">TOTAL RETURN</div>
+                        <div class="data-value"><span id="total-return-value">0.00</span></div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th data-column="symbol" style="text-align: center">Symbol <span class="sort-arrow">↕</span></th>
+                                <th data-column="shares" style="text-align: center">Shares <span class="sort-arrow">↕</span></th>
+                                <th data-column="price" style="text-align: center">Price <span class="sort-arrow">↕</span></th>
+                                <th data-column="change" style="text-align: center">Change <span class="sort-arrow">↕</span></th>
+                                <th data-column="marketValue" style="text-align: center">Mkt Value <span class="sort-arrow">↕</span></th>
+                                <th data-column="pnl" style="text-align: center">P/L <span class="sort-arrow">↕</span></th>
+                                <th data-sortable="false" style="text-align: center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="portfolio-tbody">
+                            <!-- Tickers will be dynamically added here -->
+                        </tbody>
+                    </table>
+                    <button id="add-ticker-btn" class="add-ticker-button">+ Add Ticker</button>
+                    <!-- <button id="refresh-prices" class="add-ticker-button">Refresh Prices</button> Refresh button -->
+                    <div id="add-ticker-form" style="display: none; margin-top: 10px;">
+                        <!-- <select id="asset-type">
+                            <option value="stock">Stock</option>
+                            <option value="crypto">Cryptocurrency</option>
+                        </select> -->
+                        <input type="text" id="ticker-symbol" placeholder="Symbol (e.g., AAPL, SPX, BTC)" required>
+                        <input type="number" id="shares" placeholder="Shares/Units" required>
+                        <input type="number" id="cost-basis" placeholder="Cost Basis" required>
+                        <button id="submit-ticker" class="add-ticker-button">Add</button>
+                        <button id="cancel-add-ticker" class="add-ticker-button">Cancel</button>
+                    </div>
+                </div>
+                <!-- <div class="resize-handle-h"></div> -->
+                <!-- Add this after your portfolio table -->
+                <div id="chart-container">
+                    <div class="box">
+                        <div class="box-header">
+                            <div class="chart-title">
+                                <span id="chart-symbol"></span>
+                                <span id="statement-type-display" style="display: none;"></span>
+                            </div>
+                            <div class="chart-controls">
+                                <button class="range-btn" data-range="1D">1D</button>
+                                <button class="range-btn" data-range="1W">1W</button>
+                                <button class="range-btn" data-range="1M">1M</button>
+                                <button class="range-btn" data-range="3M">3M</button>
+                                <button class="range-btn" data-range="1Y">1Y</button>
+                                <button class="range-btn" data-range="ALL">ALL</button>
+                            </div>
+                            <div class="chart-options">
+                                <label class="switch" id="scale-toggle-container">
+                                    <input type="checkbox" id="scale-toggle">
+                                    <span class="slider">Log</span>
+                                </label>
+                                <button id="chart-expand" class="expand-btn">
+                                    <span class="expand-icon">⤢</span>
+                                </button>
+                                <button id="back-to-chart" class="back-btn" style="display: none;">
+                                    Back to Chart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-content chart-box-content">
+                            <div class="chart-wrapper">
+                                <canvas id="price-chart"></canvas>
+                            </div>
+                            <div class="financial-statements-table" style="display: none;">
+                                <table id="statements-table">
+                                    <thead>
+                                        <tr id="statements-header">
+                                        </tr>
+                                    </thead>
+                                    <tbody id="statements-body">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="resize-handle-v"></div> -->
+        <div class="right-panel">
+            <!-- <div class="box">
+                <div class="box-header clickable">
+                    <span>MARKET OVERVIEW</span>
+                    <span class="minimize-btn">−</span>
+                </div>
+                <div class="box-content">
+                    <div class="market-overview">
+                        <div class="index-item">
+                            <span class="index-label">SPY</span>
+                            <span id="sp500" class="loading"></span>
+                        </div>
+                        <div class="index-item">
+                            <span class="index-label">DIA</span>
+                            <span id="dow" class="loading"></span>
+                        </div>
+                        <div class="index-item">
+                            <span class="index-label">QQQ</span>
+                            <span id="nasdaq" class="loading"></span>
+                        </div>
+                        <div class="index-item">
+                            <span class="index-label">VXX</span>
+                            <span id="vix" class="loading"></span>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <!-- <div class="resize-handle-h"></div> -->
+            <div class="box">
+                <div class="box-header clickable">
+                    <span>TRENDING ON X<span id="sentiment-score" title="Sentiment Score"></span>
+                    <span class="minimize-btn">−</span>
+                </div>
+                <div class="box-content minimized">
+                    <div id="news-feed" style="font-size: clamp(10px, 1.5vw, 12px)">
+                        <p class="loading">Loading...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- <div class="resize-handle-h"></div> -->
+            <div class="box">
+                <div class="box-header clickable">
+                    <span>DATA ANALYSIS</span>
+                    <!-- <span class="minimize-btn">+</span> -->
+                </div>
+                <div class="box-content minimized">
+                    <div class="data-analysis-section">
+                        <ul class="analysis-list">
+                            <li class="analysis-item" data-analysis="technical">
+                                <span>Technical Analysis</span>
+                            </li>
+                            <li class="analysis-item" data-analysis="financial-statements" id="financial-statements-btn">
+                                <span>Financial Statements</span>
+                                <div class="statement-type-selector" style="display: none;">
+                                    <button class="range-btn" data-statement-type="INCOME_STATEMENT">Income Statement</button>
+                                    <button class="range-btn" data-statement-type="BALANCE_SHEET">Balance Sheet</button>
+                                    <button class="range-btn" data-statement-type="CASH_FLOW">Cash Flow</button>
+                                </div>
+                            </li>
+                            <li class="analysis-item" id="moving-averages-btn" data-analysis-type="ma">
+                                <span>Simple Moving Averages (50, 100, 200)</span>
+                                <div class="ma-indicators" style="display: none;">
+                                    <label><input type="checkbox" data-ma="50" checked> 50 SMA</label>
+                                    <label><input type="checkbox" data-ma="100" checked> 100 SMA</label>
+                                    <label><input type="checkbox" data-ma="200" checked> 200 SMA</label>
+                                </div>
+                            </li>
+                            <li class="analysis-item">
+                                <span>Video Transcript (Fabric)</span>
+                            </li>
+                            <li class="analysis-item">
+                                <span>Sentiment Analysis</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="resize-handle-h"></div> -->
+            <div class="box">
+                <div class="box-header clickable">
+                    <span>AI SEARCH</span>
+                    <div class="header-controls">
+                        <button id="chat-expand" class="expand-btn">
+                            <span class="expand-icon">⤢</span>
+                        </button>
+                        <span class="minimize-btn"></span>
+                    </div>
+                </div>
+                <div class="box-content minimized">
+                    <div class="chat-wrapper" id="chat-wrapper">
+                        <div class="chat-container">
+                            <button class="expand-button" id="expand-chat">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            
+                            <div class="model-select-container">
+                                <select id="model-select" class="model-select">
+                                    <option value="sonar">sonar</option>
+                                    <option value="sonar-pro">sonar-pro</option>
+                                    <option value="sonar-reasoning">sonar-reasoning</option>
+                                </select>
+                            </div>
+                            
+                            <div id="chat-messages" class="chat-messages"></div>
+                            
+                            <div class="chat-input-container">
+                                <textarea 
+                                    id="chat-input" 
+                                    class="chat-input"
+                                    placeholder="Powered by Perplexity API"
+                                    rows="1"
+                                ></textarea>
+                                <button id="send-message" class="send-button">
+                                    <span class="button-text">Send</span>
+                                    <div class="loading-spinner" style="display: none;"></div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="resize-handle-h"></div> -->
+            <!-- <div class="box">
+                <div class="box-header clickable">
+                    <span>MESSAGES</span>
+                    <span class="minimize-btn">+</span>
+                </div>
+                <div class="box-content minimized">
+                    <div id="chat-messages" class="chat-messages">
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chat-input" placeholder="Ask me anything about your portfolio...">
+                        <button id="send-message">Send</button>
+                    </div>
+                </div>
+            </div> -->
+            <!-- <div class="resize-handle-h"></div> -->
+            <!-- <div class="box">
+                <div class="box-header clickable">
+                    <span>FILE TRANSFER</span>
+                    <span class="minimize-btn">+</span>
+                </div>
+                <div class="box-content minimized">
+                    <div class="file-sharing-container">
+                        <div class="upload-section">
+                            <input type="file" id="file-input" class="file-input">
+                            <button id="upload-btn" class="upload-button">Upload</button>
+                        </div>
+                        <div id="shared-files" class="shared-files">
+                            
+                            <div class="shared-file">
+                                <span class="file-name">new_strategy.pdf</span>
+                                <div class="file-actions">
+                                    <button class="download-btn">Download</button>
+                                    
+                                </div>
+                            </div>
+                            <div class="shared-file">
+                                <span class="file-name">Q1_allocation.xlsx</span>
+                                <div class="file-actions">
+                                    <button class="download-btn">Download</button>
+                                    
+                                </div>
+                            </div>
+                            <div class="shared-file">
+                                <span class="file-name">exit_strategy.pdf</span>
+                                <div class="file-actions">
+                                    <button class="download-btn">Download</button>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <script src="/static/js/script.js"></script>
+    <script src="/static/js/portfolio.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <!-- Footer -->
+    <!-- <footer class="footer">
+        <p>Good Future LLC</p>
+    </footer> -->
+    <script>
+        let isFinancialStatementsVisible = false;
+
+        document.getElementById('financial-statements-btn').addEventListener('click', function() {
+            isFinancialStatementsVisible = !isFinancialStatementsVisible;
+            document.getElementById('scale-toggle-container').style.display = isFinancialStatementsVisible ? 'none' : 'block';
+            document.querySelector('.financial-statements-table').style.display = isFinancialStatementsVisible ? 'block' : 'none';
+            document.querySelector('.chart-wrapper').style.display = isFinancialStatementsVisible ? 'none' : 'block';
+
+            // Toggle the visibility of the statement type selector
+            const statementTypeSelector = this.querySelector('.statement-type-selector');
+            statementTypeSelector.style.display = isFinancialStatementsVisible ? 'block' : 'none';
+
+            // Update button appearance
+            this.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.statement-type-selector .range-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent event from bubbling up
+                // Reset all buttons to default style
+                document.querySelectorAll('.statement-type-selector .range-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Update statement type display
+                const statementType = this.dataset.statementType;
+                document.getElementById('statement-type-display').textContent = statementType.replace(/_/g, ' ');
+                document.getElementById('statement-type-display').style.display = 'inline';
+            });
+        });
+
+        document.getElementById('back-to-chart').addEventListener('click', function() {
+            document.getElementById('scale-toggle-container').style.display = 'block';
+            document.querySelector('.financial-statements-table').style.display = 'none';
+            document.querySelector('.chart-wrapper').style.display = 'block';
+            isFinancialStatementsVisible = false;
+            
+            // Reset button states
+            document.getElementById('financial-statements-btn').classList.remove('active');
+            document.querySelector('.statement-type-selector').style.display = 'none';
+            document.getElementById('statement-type-display').style.display = 'none';
+        });
+
+        document.querySelectorAll('#portfolio-tbody tr').forEach(row => {
+            row.addEventListener('click', function() {
+                // Reset all rows
+                document.querySelectorAll('#portfolio-tbody tr').forEach(r => {
+                    r.classList.remove('active');
+                });
+                // Highlight selected row
+                this.classList.add('active');
+                
+                const tickerSymbol = this.getAttribute('data-symbol');
+                if (isFinancialStatementsVisible) {
+                    updateTableData(tickerSymbol);
+                } else {
+                    showChartForTicker(tickerSymbol);
+                }
+            });
+        });
+
+        function updateTableData(tickerSymbol) {
+            console.log(`Updating table data for: ${tickerSymbol}`);
+            // Implementation for updating table data
+        }
+
+        function showChartForTicker(tickerSymbol) {
+            console.log(`Showing chart for: ${tickerSymbol}`);
+            // Implementation for showing chart
+        }
+    </script>
+</body>
+<!-- <footer class="footer">
+        <p>Good Future LLC</p>
+    </footer> -->
+</html>

@@ -1,0 +1,1948 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+    background-color: #1a1a1a;
+    /* color: #00ff00; */
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.header {
+    background-color: #000;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    user-select: none;
+}
+
+.header h2 {
+    font-size: clamp(16px, 4vw, 24px);
+}
+
+.container {
+    display: flex;
+    height: calc(100vh - 50px);
+    flex-direction: column;
+}
+
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    min-width: 200px;
+}
+
+.right-panel {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    /* height: 100%; */
+}
+
+.resize-handle-v {
+    width: 4px;
+    background-color: #333;
+    cursor: col-resize;
+    transition: background-color 0.2s;
+}
+
+.resize-handle-h {
+    height: 4px;
+    background-color: #333;
+    cursor: row-resize;
+    transition: background-color 0.2s;
+}
+
+.resize-handle-v:hover,
+.resize-handle-h:hover {
+    background-color: #00ff00;
+}
+
+.box {
+    background-color: #000;
+    border: 1px solid #333;
+    overflow: auto;
+    max-height: 100%;
+}
+
+.box-header {
+    background-color: #222;
+    color: #00ff00;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer; 
+    user-select: none;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* .box-content {
+    padding: 10px;
+    transition: height 0.3s;
+    overflow: auto;
+}
+
+.box-content.closed {
+    display: none;
+}
+.minimize-btn {
+    transform: rotate(180deg);
+}
+
+.box-header.clickable {
+    cursor: pointer;
+}
+
+.box-content.minimized {
+    display: none !important;
+}
+
+.box-header.clickable {
+    cursor: pointer;
+    user-select: none;
+} */
+
+.box-content.minimized {
+    display: none;
+}
+
+.box-header.clickable {
+    cursor: pointer;
+}
+
+.minimize-btn {
+    float: right;
+    cursor: pointer;
+}
+
+
+.ma-indicators {
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+.ma-indicators label {
+    display: block;
+    margin: 4px 0;
+    font-size: 0.9em;
+}
+
+
+
+
+
+
+/* .minimize-btn {
+    color: #00ff00;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+    padding: 0 10px;
+} */
+.minimize-btn {
+    display: none;  /* Hide the minimize button */
+}
+
+#chart-type-toggle svg {
+    vertical-align: middle;
+}
+
+#chart-type-toggle:hover svg {
+    fill: #00ff00;
+    stroke: #00ff00;
+}
+
+.chart-box-content {
+    height: 400px;  /* Or whatever height you prefer */
+    position: relative;
+}
+
+.chart-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.market-data {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.data-box {
+    background-color: #222;
+    padding: 10px;
+    text-align: center;
+}
+
+.data-label {
+    font-size: 12px;
+    color: #888;
+}
+
+.data-value {
+    font-size: clamp(14px, 2vw, 18px);
+    margin-top: 5px;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(12px, 1.5vw, 14px);
+    min-width: 600px;
+}
+
+th, td {
+    border: 1px solid #333;
+    padding: 5px;
+    text-align: left;
+}
+
+th {
+    background-color: #222;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.positive { color: #00ff00; }
+.negative { color: #ff0000; }
+.ticker-row:hover { background-color: #222; }
+
+/* Responsive breakpoints */
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row;
+    }
+    
+    .right-panel {
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 767px) {
+    .resize-handle-v,
+    .resize-handle-h {
+        display: none;
+    }
+    
+    .right-panel {
+        height: auto;
+    }
+    
+    .box {
+        margin-bottom: 2px;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+    .ticker-row:hover {
+        background-color: transparent;
+    }
+    
+    .ticker-row:active {
+        background-color: #222;
+    }
+}
+
+/* Small screen optimizations */
+@media (max-width: 480px) {
+    .box-content {
+        padding: 5px;
+    }
+    
+    .market-data {
+        grid-template-columns: 1fr;
+    }
+    
+    table {
+        font-size: 12px;
+    }
+    
+    th, td {
+        padding: 3px;
+    }
+}
+.add-ticker-button {
+    background: #222;
+    color: #00ff00;
+    border: 1px solid #333;
+    padding: 5px 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.add-ticker-button:hover {
+    background: #333;
+}
+
+#add-ticker-form input {
+    background: #222;
+    border: 1px solid #333;
+    color: #00ff00;
+    padding: 5px;
+    margin-right: 5px;
+}
+
+.search-results {
+    position: absolute;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 100%;
+    z-index: 1000;
+    margin-top: 5px;
+}
+
+.search-result {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #333;
+}
+
+.search-result:hover {
+    background: #333;
+}
+
+.search-error {
+    padding: 8px 12px;
+    color: #ff4444;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: #ff0000;
+    cursor: pointer;
+    padding: 2px 5px;
+}
+
+/* Add this to your CSS file */
+.edit-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 2px 5px;
+}
+
+.chat-messages {
+    height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #000;
+    border: 1px solid #333;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.chat-input-container {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    background-color: #000;
+    border: 1px solid #333;
+    border-radius: 4px;
+    /* margin-bottom: 10px; */
+    margin-top: 10px;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+#chat-input:focus {
+    outline: none;
+    border-color: #00ff00;
+}
+
+#send-message {
+    padding: 8px 16px;
+    background: #222;
+    border: 1px solid #333;
+    color: #00ff00;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+#send-message:hover {
+    background: #333;
+    border-color: #00ff00;
+}
+
+/* sort button */
+.sort-btn {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 0 4px;
+    font-size: 12px;
+}
+
+.sort-btn:hover {
+    color: #fff;
+}
+
+.sort-btn.active {
+    color: #fff;
+}
+
+.sort-btn.asc {
+    transform: rotate(180deg);
+}
+
+/* File Sharing Styles */
+.file-sharing-container {
+    padding: 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.upload-section {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center; /* Align items vertically */
+    gap: 10px;
+    height: 100%;
+}
+
+.file-input {
+    background-color: #1a1a1a;
+    color: #fff;
+    border: 1px solid #2a2a2a;
+    padding: 5px;
+    flex-grow: 1;
+    height: 32px; /* Set specific height */
+}
+
+.upload-button {
+    background-color: #2a2a2a;
+    color: #fff;
+    border: none;
+    padding: 0 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    height: 32px; /* Match height with file input */
+    white-space: nowrap; /* Prevent text wrapping */
+    display: flex;
+    align-items: center; /* Center text vertically */
+}
+
+.upload-button:hover {
+    background-color: #3c3c3c;
+}
+
+.shared-files {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #2c2c2c;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #1a1a1a;
+}
+
+/* File item styles */
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #2c2c2c;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-name {
+    color: #fff;
+    flex: 1;
+}
+
+.file-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.file-action-btn {
+    padding: 4px 8px;
+    background-color: #2c2c2c;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.file-action-btn:hover {
+    background-color: #3c3c3c;
+}
+
+.file-action-btn.download {
+    background-color: #1a5f7a;
+}
+
+.file-action-btn.delete {
+    background-color: #7a1a1a;
+}
+
+/* Custom file input button */
+.file-input::file-selector-button {
+    padding: 8px 12px;
+    background-color: #2c2c2c;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.2s;
+}
+
+.file-input::file-selector-button:hover {
+    background-color: #3c3c3c;
+}
+
+
+.file-input {
+    background-color: #1a1a1a;
+    color: #fff;
+    border: 1px solid #2a2a2a;
+    padding: 5px;
+    flex-grow: 1;
+}
+
+.upload-button {
+    background-color: #2a2a2a;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.upload-button:hover {
+    background-color: #3a3a3a;
+}
+
+/* data analysis section */
+/* Visualization Controls */
+.visualization-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+}
+
+.visualization-controls select {
+    background-color: #1a1a1a;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    outline: none;
+    font-family: 'Courier New', monospace;
+}
+
+.visualization-controls select:hover {
+    background-color: #2a2a2a;
+}
+
+.visualization-controls select:focus {
+    border-color: #00ff00;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+}
+
+.visualization-container {
+    border: 1px solid #333;
+    padding: 10px;
+    background-color: #1a1a1a;
+    min-height: 200px;
+}
+
+/* Style for the dropdown options */
+.visualization-controls select option {
+    background-color: #1a1a1a;
+    color: #00ff00;
+    padding: 5px;
+}
+
+
+/* analysis list items */
+.analysis-item {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-bottom: 1px solid #2a2a2a;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.analysis-item:hover {
+    background-color: #2a2a2a;
+    color: #00ff00; /* Change text color on hover */
+}
+
+.analysis-item.selected {
+    background-color: #00ff00; /* Highlight selected item */
+    color: #000; /* Change text color for selected item */
+}
+
+.analysis-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Shared Files List */
+.shared-files {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.shared-file {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #2a2a2a;
+    gap: 15px; /* Add consistent spacing between filename and buttons */
+}
+
+.file-name {
+    color: #fff;
+    font-size: 0.9em;
+    max-width: 200px; /* Set fixed width */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}
+
+.file-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0; /* Prevent buttons from shrinking */
+}
+
+.download-btn, .delete-btn {
+    padding: 4px 8px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: background-color 0.2s;
+}
+
+.download-btn {
+    background-color: #2a2a2a;
+    color: #fff;
+}
+
+.delete-btn {
+    background-color: #2a2a2a;
+    color: #ff4444;
+}
+
+.download-btn:hover {
+    background-color: #3a3a3a;
+}
+
+.delete-btn:hover {
+    background-color: #3a2a2a;
+}
+
+/* Scrollbar Styling */
+.shared-files::-webkit-scrollbar {
+    width: 8px;
+}
+
+.shared-files::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.shared-files::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
+    border-radius: 4px;
+}
+
+.shared-files::-webkit-scrollbar-thumb:hover {
+    background: #3a3a3a;
+}
+
+/* footer{
+    display: flex;
+    justify-content: center;
+} */
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #222; 
+    padding: 10px 0; /* Adjust padding as needed */
+    font-size: 14px; /* Adjust font size as needed */
+    color: #fff; /* Light text color for contrast */
+    border-top: 1px solid #333; /* Optional: subtle border for separation */
+}
+
+/*  add ticker */
+
+/* Styling for the asset type selector */
+#asset-type {
+    padding: 8px;
+    margin: 5px;
+    border: 1px solid #30363d;
+    background-color: #0d1117;
+    color: #c9d1d9;
+    border-radius: 4px;
+    font-size: 14px;
+    width: calc(100% - 10px);  /* Matches other inputs, accounting for margin */
+}
+
+#asset-type:focus {
+    outline: none;
+    border-color: #58a6ff;
+}
+
+#asset-type option {
+    background-color: #0d1117;
+    color: #c9d1d9;
+}
+
+/* Ensure consistent styling with other form elements */
+#add-ticker-form input,
+#add-ticker-form select {
+    margin: 5px;
+    width: calc(100% - 10px);
+}
+
+
+
+/* Loading spinner */
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #3b82f6;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Loading state */
+.loading-row td {
+    opacity: 0.5;
+}
+
+/* Error state */
+.error-cell {
+    color: #ef4444;
+    font-style: italic;
+}
+
+.asset-type-toggle {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.asset-btn {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f5f5f5;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.asset-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+/* Add crypto-specific styling */
+.crypto-row {
+    background-color: rgba(247, 147, 26, 0.1); /* Bitcoin orange with low opacity */
+}
+
+.stock-row {
+    background-color: rgba(0, 123, 255, 0.1); /* Blue with low opacity */
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+    opacity: 0.6;
+    color: #666;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
+
+/* Enhance the change values with colors when data loads */
+.change.positive {
+    color: #00ff00;
+}
+
+.change.negative {
+    color: #ff0000;
+}
+
+/* Generic loading state for all elements */
+.loading, 
+td:contains("Loading..."), 
+td:contains("--"),
+span:contains("Loading..."),
+span:contains("--") {
+    animation: pulse 1.5s ease-in-out infinite;
+    opacity: 0.6;
+    color: #666;
+}
+
+/* Keep the existing pulse animation */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 0.3; }
+    100% { opacity: 0.6; }
+}
+
+/* Chart container */
+#chart-container {
+    width: 100%;
+    height: calc(100vh - 350px); /* Dynamically calculate height based on viewport */
+    min-height: 400px; /* Minimum height to ensure visibility */
+    margin-top: 20px;
+    background: #1a1a1a;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    /* transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); */
+    /* transition: transform 1s ease; */
+}
+
+#chart-container .box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.box-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    gap: 15px;
+    border-bottom: 1px solid #333;
+}
+
+.chart-title {
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.chart-controls {
+    display: flex;
+    gap: 5px;
+    flex-wrap: nowrap;
+}
+
+.chart-controls button {
+    padding: 6px 12px;
+    background: #333;
+    border: 1px solid #444;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.chart-controls button:hover {
+    background: #444;
+}
+
+.chart-controls button.active {
+    background: #00ff00;
+    color: #000;
+    border-color: #00ff00;
+}
+
+.candlestick-btn {
+    background: #00ff00;
+    color: #000;
+    /* color: white; */
+    border-color: #00ff00;
+}
+
+
+.chart-options {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.box-content {
+    flex: 1;
+    position: relative;
+    padding: 15px;
+}
+
+#price-chart {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Expanded state */
+#chart-container.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 1000;
+    background: #000000;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: all 0s ease;
+}
+
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .box-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .chart-controls {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+
+    .chart-controls button {
+        flex-shrink: 0;
+    }
+
+    .chart-options {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+/* Switch styling */
+/* .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 24px;
+    
+} */
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #333;
+    transition: .4s;
+    border-radius: 12px;
+    /* border: 1px solid #444; */
+    padding: 4px 8px;
+    text-align: center;
+    color: #fff;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.switch input:checked + .slider {
+    background-color: #00ff00;
+    color: #000;
+}
+
+/* Add responsive adjustments */
+@media (max-width: 768px) {
+    #chart-container {
+        height: 300px;
+    }
+    
+    #price-chart {
+        height: 200px !important;
+    }
+    
+    .chart-controls button {
+        padding: 4px 10px;
+        margin: 0 2px;
+        font-size: 0.9em;
+    }
+}
+
+/* Add styles for the holdings table container */
+.holdings-container {
+    max-height: 40vh;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+#chart-container {
+    height: calc(100vh - 350px);
+    margin: 20px 0;
+    position: relative;
+}
+
+#chart-container.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    z-index: 1000;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+#chart-controls {
+    margin: 10px 0;
+}
+
+#chart-controls button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+}
+
+#chart-controls button:hover {
+    background: #f0f0f0;
+}
+
+.time-button.active {
+    background: #00ff00 !important;
+    color: white;
+    border-color: #00ff00 !important;
+}
+
+.range-btn {
+    padding: 4px 8px;
+    margin: 0 2px;
+    border: 1px solid #ccc;
+    background: transparent;
+    cursor: pointer;
+}
+
+.range-btn.active {
+    background: #2196F3;
+    color: white;
+    border-color: #2196F3;
+}
+
+.chart-container.expanded {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    height: 90vh;
+    z-index: 1000;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Time range buttons styling */
+[data-range] {
+    background: #222222;
+    color: #888888;
+    border: 1px solid #333333;
+    padding: 5px 15px;
+    cursor: pointer;
+}
+
+[data-range].active {
+    background: #00ff00;
+    color: #000000;
+    border-color: #00ff00;
+}
+
+[data-range]:hover {
+    background: #333333;
+}
+
+.chart-container {
+    background: #000000;
+    border: 1px solid #333333;
+}
+
+.chart-container canvas {
+    background: #000000;
+}
+
+.negative {
+    color: red;
+}
+.negative {
+    color: #ff0000;
+}
+
+/* Only add minus sign to elements with negative class that are NOT in market overview */
+.negative:not(.market-overview .negative)::before {
+    content: "-";
+}
+
+
+.positive {
+    color: #00ff00;
+}
+/* .positive::before {
+    content: "+";
+} */
+
+/* Add this to your CSS file */
+/* #news-feed-container {
+    position: relative; /* Ensure the container is positioned relative for absolute positioning of the button */
+/* } */
+
+.sentiment-badge {
+    font-size: 0.8em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 8px;
+    background-color: #2a2a2a;
+}
+
+/* Optional: Add these classes to color-code the sentiment */
+.sentiment-positive { background-color: #1a472a; }
+.sentiment-negative { background-color: #4a1a1a; }
+.sentiment-neutral { background-color: #2a2a2a; }
+
+.news-container {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.news-item {
+    margin-bottom: 5px;
+}
+
+.news-item.hidden {
+    display: none;
+}
+
+.news-headline {
+    margin: 0;
+    padding: 8px 0;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.news-headline:hover {
+    color: #00ff00;
+}
+
+.news-date {
+    color: #888;
+    margin-right: 8px;
+}
+
+.news-title {
+    display: inline-block;
+}
+
+.news-divider {
+    height: 1px;
+    background: #333;
+    margin: 0;
+}
+
+
+
+.show-more-btn {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    background: transparent;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.show-more-btn:hover {
+    background: #00ff00;
+    color: #000;
+}
+
+.expand-button {
+    position: absolute; /* Position the button absolutely within the container */
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    background: none; /* Remove default button styles */
+    border: none; /* Remove border */
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+.expand-button img {
+    width: 20px; /* Adjust size as needed */
+    height: 20px; /* Adjust size as needed */
+}
+
+.market-overview {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    background-color: #000;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.index-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 15px;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid #222;
+    transition: background-color 0.2s ease;
+}
+
+.index-item:last-child {
+    border-bottom: none;
+}
+
+.index-item:hover {
+    background-color: #1a1a1a;
+}
+
+.index-label {
+    color: #fff;
+    font-size: 14px;
+    font-weight: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.index-value {
+    font-family: monospace;
+    color: #fff;
+    text-align: right;
+}
+
+.index-change {
+    font-family: monospace;
+    text-align: right;
+    min-width: 80px;
+}
+
+.index-change.positive {
+    color: #00ff00;
+    margin-left: 0;
+}
+
+.index-change.negative {
+    color: #ff0000;
+    margin-left: 0;
+}
+
+/* Adjust loading state */
+.index-item.loading {
+    opacity: 0.5;
+    animation: pulse 1.5s infinite;
+}
+
+.loading {
+    opacity: 0.5;
+}
+
+
+/* Add these styles to your CSS file */
+.data-analysis-section button {
+    transition: background-color 0.3s ease;
+}
+
+.data-analysis-section button.active {
+    background-color: var(--green-color);
+    color: white;
+}
+
+
+/* Sorting headers */
+th[data-column] {
+    cursor: pointer;
+    user-select: none;
+}
+
+th[data-column]:hover .sort-arrow {
+    opacity: 0.8;
+}
+
+.sort-arrow {
+    opacity: 0.4;
+    margin-left: 4px;
+    display: inline-block;
+    transition: opacity 0.2s;
+}
+
+th[data-sort='asc'] .sort-arrow,
+th[data-sort='desc'] .sort-arrow {
+    opacity: 1;
+}
+
+/* // ... existing code ... */
+
+/* Chat message styling */
+.chat-message {
+    margin-bottom: 12px;
+    padding: 8px;
+    border-radius: 4px;
+    max-width: 85%;
+    word-wrap: break-word;
+}
+
+.user-message {
+    background-color: #222;
+    margin-left: auto;
+    color: #fff;
+}
+
+.ai-message {
+    background-color: #1a1a1a;
+    margin-right: auto;
+    color: #00ff00;
+    border: 1px solid #333;
+}
+
+/* Style code blocks within messages */
+.chat-message pre {
+    background-color: #000;
+    padding: 8px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 8px 0;
+}
+
+.chat-message code {
+    font-family: monospace;
+    color: #00ff00;
+}
+
+/* Timestamp or metadata styling */
+.message-meta {
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* // ... existing code ... */
+
+
+/* Expand button styling */
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+/* Expanded chat box styling */
+
+
+/* Header controls */
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.expand-btn {
+    background: none;
+    border: none;
+    color: #00ff00;
+    cursor: pointer;
+    padding: 2px 6px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.expand-btn:hover {
+    color: #fff;
+}
+
+
+/* Chat UI styling */
+#chat-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #000;
+}
+
+.chat-input-container {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    gap: 10px;
+    padding: 20px;
+    background-color: #000;
+    border-top: 1px solid #333;
+}
+
+#chat-input {
+    flex: 1;
+    min-height: 50px;
+    padding: 12px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 4px;
+    font-family: monospace;
+    resize: none;
+}
+
+#chat-input:focus {
+    outline: none;
+    border-color: #00ff00;
+}
+
+#send-message {
+    padding: 0 20px;
+    background: #222;
+    border: 1px solid #333;
+    color: #00ff00;
+    cursor: pointer;
+    border-radius: 4px;
+    font-family: monospace;
+    white-space: nowrap;
+}
+
+#send-message:hover {
+    background: #333;
+    border-color: #00ff00;
+}
+
+/* Model selector styling */
+#model-select {
+    padding: 8px 12px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #00ff00;
+    border-radius: 4px;
+    font-family: monospace;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+#model-select:focus {
+    outline: none;
+    border-color: #00ff00;
+}
+
+#model-select option {
+    background: #1a1a1a;
+    color: #00ff00;
+    padding: 8px;
+}
+
+/* Expanded state specific styles */
+/* .right-panel .box.expanded .chat-input-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #000;
+    padding: 20px;
+    border-top: 1px solid #333;
+} */
+
+/* .right-panel .box.expanded .chat-messages {
+    /* padding-bottom: 100px;  */
+
+
+.chat-message {
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 4px;
+    max-width: 85%;
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+.chat-message p {
+    margin-bottom: 1em;
+    text-align: justify;
+}
+
+.chat-message h1,
+.chat-message h2,
+.chat-message h3,
+.chat-message h4 {
+    margin: 1em 0 0.5em;
+    color: #00ff00;
+}
+
+.chat-message ul,
+.chat-message ol {
+    margin: 0.5em 0;
+    padding-left: 1.5em;
+}
+
+.chat-message li {
+    margin: 0.25em 0;
+}
+
+.chat-message code {
+    background-color: #1a1a1a;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.chat-message pre {
+    background-color: #1a1a1a;
+    padding: 1em;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 1em 0;
+    border: 1px solid #333;
+}
+
+.chat-message pre code {
+    background-color: transparent;
+    padding: 0;
+    border: none;
+}
+
+.chat-message blockquote {
+    border-left: 3px solid #00ff00;
+    margin: 1em 0;
+    padding-left: 1em;
+    color: #888;
+}
+
+.chat-message table {
+    border-collapse: collapse;
+    margin: 1em 0;
+    width: 100%;
+}
+
+.chat-message th,
+.chat-message td {
+    border: 1px solid #333;
+    padding: 0.5em;
+    text-align: left;
+}
+
+.chat-message th {
+    background-color: #1a1a1a;
+}
+
+
+
+.right-panel .box.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    margin: 0;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+
+.right-panel .box.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+    margin: 0;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #333;
+}
+
+.right-panel .box.expanded .box-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.right-panel .box.expanded #chat-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.right-panel .box.expanded .chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.right-panel .box.expanded .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #000;
+}
+
+.right-panel .box.expanded .chat-input-container {
+    flex-shrink: 0;
+    background-color: #000;
+    padding: 15px;
+    border-top: 1px solid #333;
+}
+
+
+
+/* News Feed Styles */
+.news-item {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-bottom: 1px solid #2a2a2a;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.news-item:hover {
+    background-color: #2a2a2a;
+}
+
+.news-title {
+    color: #cecece;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+}
+
+.news-item:hover .news-title {
+    color: #00ff00;
+}
+
+.news-content {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Loading and error states */
+.loading, .no-news, .error {
+    padding: 8px 12px;
+    color: #666;
+}
+
+.error {
+    color: #ff0000;
+}
+
+/* Override any default link styles */
+.news-title:visited {
+    color: #cecece;
+}
+
+.news-title:active {
+    color: #cecece;
+}
+
+.financial-statements-table {
+    width: 100%;
+    height: calc(100vh - 350px); /* Match chart container height */
+    padding: 0; /* Remove padding to maximize space */
+    background: var(--background-color);
+    border-radius: 8px;
+    overflow: auto;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+#statements-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+#statements-table th,
+#statements-table td {
+    padding: 12px 16px;
+    text-align: right;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+/* Sticky first column with solid background */
+#statements-table th:first-child,
+#statements-table td:first-child {
+    text-align: left;
+    position: sticky;
+    left: 0;
+    background-color: #1a1a1a; /* Solid background color */
+    z-index: 1;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure header has solid background */
+#statements-table th {
+    background-color: #1a1a1a;
+    font-weight: bold;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+/* Higher z-index for top-left cell */
+#statements-table th:first-child {
+    z-index: 3;
+    background-color: #1a1a1a;
+}
+
+/* Row hover effect */
+#statements-table tbody tr:hover {
+    background-color: rgba(0, 255, 0, 0.05);
+}
+
+/* Cell hover effect */
+#statements-table tbody td:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+    cursor: pointer;
+}
+
+/* First column hover effect */
+#statements-table tbody td:first-child:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+    transform: scale(1.02);
+}
+
+/* Header hover effect */
+#statements-table th:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+    cursor: pointer;
+}
+
+/* Highlight entire column on header hover */
+#statements-table th:hover,
+#statements-table td:nth-child(n + 1):hover {
+    background-color: rgba(0, 255, 0, 0.1);
+}
+
+/* Custom scrollbar */
+.financial-statements-table::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.financial-statements-table::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.financial-statements-table::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.financial-statements-table::-webkit-scrollbar-thumb:hover {
+    background: #00cc00;
+}
+
+/* Animation for table appearance */
+@keyframes fadeIn {
+    from { 
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tooltip on hover */
+#statements-table td:hover::after {
+    content: attr(data-value);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    opacity: 0;
+    animation: fadeIn 0.2s ease-in-out forwards;
+}
+
+.statement-type-controls {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.statement-type-controls label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.statement-type-controls input[type="radio"] {
+    cursor: pointer;
+}
+
+#back-to-chart {
+    margin-right: 20px;
+}
+
+.statement-controls-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.statement-type-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.statement-type-btn {
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.statement-type-btn.active {
+    background-color: var(--green-color) !important;
+    color: var(--text-color);
+}
+
+.statement-type-btn:hover {
+    opacity: 0.8;
+}
+
+#back-to-chart {
+    margin-right: 10px;
+}
+
+.active {
+    background-color: var(--accent-color) !important;
+    color: var(--text-color-light) !important;
+}
+
+tr.active {
+    background-color: var(--highlight-color) !important;
+}
